@@ -1,5 +1,9 @@
 Flask==3.1.0
 Flask-SocketIO==5.4.1
+<<<<<<< HEAD
+=======
+  
+>>>>>>> bee5b687b485cfc1709bd44c725fe87eeb9cc99b
 SQLAlchemy==2.0.36
 apscheduler==3.10.4
 python-dotenv==1.0.1
