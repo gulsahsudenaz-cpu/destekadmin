@@ -1,7 +1,7 @@
 """Güvenlik ve performans middleware'leri"""
 import time
 from functools import wraps
-from flask import request, jsonify, g
+from flask import request, jsonify
 import logging
 
 # Rate limiting için basit in-memory store
@@ -31,18 +31,16 @@ def rate_limit(max_requests=60, window=60):
         return wrapper
     return decorator
 
-def request_logger():
+def request_logger(f):
     """Request logging middleware"""
-    @wraps
-    def wrapper():
-        g.start_time = time.time()
-        
-    def after_request(response):
-        duration = time.time() - getattr(g, 'start_time', time.time())
-        logging.info(f"{request.method} {request.path} - {response.status_code} - {duration:.3f}s")
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        response = f(*args, **kwargs)
+        duration = time.time() - start_time
+        logging.info(f"{request.method} {request.path} - {duration:.3f}s")
         return response
-    
-    return after_request
+    return wrapper
 
 def security_headers(response):
     """Güvenlik header'larını ekle"""
