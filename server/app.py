@@ -49,7 +49,7 @@ def cors_and_security(resp):
     return resp
 
 # Socket.IO
-socketio = SocketIO(app, cors_allowed_origins=ALLOWED, async_mode='eventlet')
+socketio = SocketIO(app, cors_allowed_origins=ALLOWED, async_mode='threading')
 
 # Blueprints
 app.register_blueprint(tg_bp, url_prefix="/tg")
