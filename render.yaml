@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: destekadmin
+    env: python
+    region: frankfurt
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m server.app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: TZ
+        value: Europe/Istanbul
+      - key: PYTHON_VERSION
+        value: 3.11.0

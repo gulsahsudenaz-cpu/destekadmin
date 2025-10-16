@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0EA5E9">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Destek Hattı</title>
+  <link rel="stylesheet" href="/static/css/main.css">
+  <link rel="stylesheet" href="/static/css/chat.css">
+</head>
+<body>
+  <!-- Welcome Screen -->
+  <div id="welcomeScreen" class="screen">
+    <div class="welcome-content">
+      <div class="logo">📞</div>
+      <h1>Profesyonel Destek Merkezi</h1>
+      <p>Uzman ekibimizle ister yazarak ister sesli/görüntülü görüşerek anında destek alın</p>
+      <input type="text" id="nameInput" placeholder="Adınız" maxlength="30" autocomplete="name">
+      <button id="startBtn" class="btn-primary" disabled>Chat'e Başla</button>
+      <div class="footer-text">🔒 Güvenli ve şifreli bağlantı</div>
+    </div>
+  </div>
+
+  <!-- Chat Screen -->
+  <div id="chatScreen" class="screen hidden">
+    <header class="chat-header">
+      <div class="header-info">
+        <div class="status-dot"></div>
+        <div>
+          <div class="header-title">Destek Ekibi</div>
+          <div class="header-subtitle">Muhsin</div>
+        </div>
+      </div>
+      <button id="callBtn" class="call-btn" title="Sesli/Görüntülü Arama">📞</button>
+    </header>
+
+    <main class="chat-main">
+      <ul id="msgs" class="msgs"></ul>
+    </main>
+
+    <footer class="chat-footer">
+      <button id="emojiBtn" class="icon-btn">😊</button>
+      <input id="txtInput" class="msg-input" placeholder="Mesaj yazın..." />
+      <input id="fileImg" type="file" accept="image/*" capture="environment" hidden />
+      <input id="fileAud" type="file" accept="audio/*" capture="microphone" hidden />
+      <button id="imgBtn" class="icon-btn">🖼️</button>
+      <button id="audBtn" class="icon-btn">🎤</button>
+      <button id="sendBtn" class="send-btn">Gönder</button>
+    </footer>
+  </div>
+
+  <!-- Call Screen -->
+  <div id="callScreen" class="screen hidden">
+    <div class="video-wrapper">
+      <video id="remoteVideo" autoplay playsinline></video>
+      <video id="localVideo" autoplay playsinline muted></video>
+      
+      <div id="statusBar" class="status-bar">
+        <span id="statusText">Bağlanıyor...</span>
+        <span id="timer">00:00</span>
+      </div>
+
+      <div id="waitingOverlay" class="overlay">
+        <div class="spinner"></div>
+        <p>Arama başlatılıyor...</p>
+      </div>
+
+      <div id="errorOverlay" class="overlay hidden">
+        <div class="error-icon">⚠️</div>
+        <p id="errorText">Bağlantı hatası</p>
+        <button id="retryBtn" class="btn-secondary">Tekrar Dene</button>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="muteBtn" class="control-btn"><span class="icon">🎙️</span></button>
+      <button id="cameraBtn" class="control-btn"><span class="icon">📹</span></button>
+      <button id="endBtn" class="control-btn end"><span class="icon">📞</span></button>
+      <button id="speakerBtn" class="control-btn"><span class="icon">🔊</span></button>
+      <button id="fullscreenBtn" class="control-btn"><span class="icon">⛶</span></button>
+    </div>
+  </div>
+
+  <audio id="remoteAudio" autoplay playsinline></audio>
+
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script type="module" src="/static/js/client.js"></script>
+</body>
+</html>

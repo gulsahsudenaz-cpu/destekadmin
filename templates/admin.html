@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="/static/css/main.css">
+  <link rel="stylesheet" href="/static/css/admin.css">
+  <link rel="stylesheet" href="/static/css/chat.css">
+  <style>
+    body { background: #F1F5F9; }
+    .page { min-height: 100vh; display: grid; grid-template-rows: auto 1fr; }
+    .header { padding: 16px 20px; background: #fff; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; }
+    .card { background: #fff; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .btn { padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; }
+    .btn-primary { background: #0EA5E9; color: #fff; }
+    .btn-primary:hover { background: #0284c7; }
+    .input { padding: 10px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; }
+    .footer { padding: 12px 16px; border-top: 1px solid #E2E8F0; display: flex; gap: 8px; align-items: center; }
+  </style>
+</head>
+<body class="page">
+  <header class="header">
+    <div>
+      <span class="tab active">Chat</span>
+      <a href="/test" class="btn" style="margin-left:12px">🧪 Test</a>
+    </div>
+  </header>
+
+  <main class="admin-grid">
+    <aside class="card list">
+      <div class="otp">
+        <input id="otp" placeholder="OTP" class="input">
+        <button id="btnOtp" class="btn btn-primary">Giriş</button>
+      </div>
+      <ul id="threads" class="threads"></ul>
+    </aside>
+
+    <section class="card panel">
+      <header class="panel-header">
+        <div id="threadTitle">Sohbet seçin</div>
+        <div class="panel-actions">
+          <button id="btnPhone" class="btn btn-primary" title="Ara">📞</button>
+          <button id="btnDelete" class="btn" title="Sil">🗑️</button>
+        </div>
+      </header>
+      <ul id="msgs" class="msgs"></ul>
+      <footer class="footer">
+        <input id="txt" class="input" placeholder="Mesaj yazın..." style="flex:1">
+        <button id="btnSend" class="btn btn-primary">Gönder</button>
+      </footer>
+    </section>
+  </main>
+
+  <audio id="remoteAudio" autoplay playsinline></audio>
+
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script type="module" src="/static/js/admin.js"></script>
+</body>
+</html>

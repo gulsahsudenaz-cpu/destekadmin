@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test & Repair</title>
+  <link rel="stylesheet" href="/static/css/main.css">
+  <style>
+    body { background: #F1F5F9; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .card { background: #fff; border-radius: 14px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    h1 { font-size: 24px; margin-bottom: 10px; color: #0F172A; }
+    h2 { font-size: 18px; margin: 20px 0 10px; color: #334155; }
+    .btn { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; margin-right: 10px; transition: all 0.2s; }
+    .btn-primary { background: #0EA5E9; color: #fff; }
+    .btn-primary:hover { background: #0284c7; }
+    .input { padding: 10px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; margin-right: 10px; }
+    #times { list-style: none; padding: 0; margin-top: 10px; }
+    #times li { padding: 10px; background: #F8FAFC; border-radius: 8px; margin-bottom: 6px; }
+    #report { background: #F8FAFC; padding: 15px; border-radius: 8px; margin-top: 20px; white-space: pre-wrap; font-family: monospace; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Sistem Testleri</h1>
+      <div>
+        <button id="btnRun" class="btn btn-primary">Tüm Testleri Çalıştır</button>
+        <button id="btnRepair" class="btn">Repair</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Test Saatleri</h2>
+      <div>
+        <input id="time" type="time" class="input">
+        <button id="btnAdd" class="btn">Ekle</button>
+      </div>
+      <ul id="times"></ul>
+    </div>
+
+    <div class="card">
+      <h2>Sonuçlar</h2>
+      <div id="report">Henüz test çalıştırılmadı</div>
+    </div>
+  </div>
+
+  <script type="module" src="/static/js/test_runner_client.js"></script>
+</body>
+</html>
