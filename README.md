@@ -86,14 +86,29 @@ TELEGRAM_WEBHOOK_URL=https://destekadmin.onrender.com/tg/webhook
 
 ## 🎯 Özellikler
 
-- ✅ Mobil-first tasarım
-- ✅ Tam ekran chat
+### Core
+- ✅ Mobil-first responsive tasarım
+- ✅ Tam ekran chat arayüzü
 - ✅ WebRTC P2P sesli/görüntülü arama
-- ✅ Telegram entegrasyonu
-- ✅ Admin paneli
-- ✅ Test & Repair araçları
-- ✅ SQLite veritabanı
+- ✅ Gerçek zamanlı mesajlaşma (Socket.IO)
+- ✅ Resim ve ses dosyası paylaşımı
+
+### Admin & Management
+- ✅ Admin paneli (OTP girişi)
+- ✅ Chat geçmişi yönetimi
+- ✅ Telegram bot entegrasyonu
+- ✅ Otomatik test sistemi
 - ✅ Zamanlanmış testler
+- ✅ Sistem repair araçları
+
+### Güvenlik & Performans
+- ✅ Rate limiting
+- ✅ CORS koruması
+- ✅ CSP (Content Security Policy)
+- ✅ XSS koruması
+- ✅ Güvenlik header'ları
+- ✅ Professional logging
+- ✅ Health check endpoint
 
 ## 📱 Kullanım
 

@@ -1,26 +1,39 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
+
+# Güvenlik güncellemeleri
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends curl && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Install dependencies
+# Non-root user oluştur
+RUN useradd -m -u 1000 app && \
+    mkdir -p /app/logs && \
+    chown -R app:app /app
+
+# Dependencies yükle
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Create non-root user
-RUN useradd -m app && chown -R app:app /app
+# Uygulama dosyalarını kopyala
+COPY --chown=app:app . .
 
-# Copy application
-COPY . .
-
-# Switch to non-root user
+# Non-root user'a geç
 USER app
 
-# Expose port
+# Port aç
 EXPOSE 10000
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD python -c "import requests; requests.get('http://localhost:10000/health', timeout=5)" || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:10000/health || exit 1
 
-# Run application
+# Environment variables
+ENV FLASK_ENV=production
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Uygulamayı çalıştır
 CMD ["python", "-m", "server.app"]

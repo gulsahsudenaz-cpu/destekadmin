@@ -4,12 +4,17 @@ services:
     env: python
     region: frankfurt
     plan: free
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
     startCommand: python -m server.app
+    healthCheckPath: /health
     envVars:
       - key: FLASK_ENV
         value: production
       - key: TZ
         value: Europe/Istanbul
       - key: PYTHON_VERSION
-        value: 3.11.0
+        value: 3.12.0
+      - key: WEB_CONCURRENCY
+        value: 1
+      - key: MAX_WORKERS
+        value: 1

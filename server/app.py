@@ -8,24 +8,44 @@ from .scheduler import start_scheduler, refresh_jobs
 from .telegram_bot import tg_bp
 from .testsuite import run_all_tests_and_report
 from .repair import run_repair
+from .logger import setup_logging
+from .middleware import rate_limit, security_headers
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 app = Flask(__name__, static_folder=os.path.join(BASE_DIR, 'static'), template_folder=os.path.join(BASE_DIR, 'templates'))
 app.config['SECRET_KEY'] = cfg.SECRET_KEY
 
-# CORS basit
+# CORS ve güvenlik
 ALLOWED = [o.strip() for o in cfg.ALLOWED_ORIGINS.split(',') if o.strip()]
+
 @app.after_request
-def cors(resp):
+def cors_and_security(resp):
+    # CORS
     o = request.headers.get('Origin')
     if o in ALLOWED or '*' in ALLOWED:
         resp.headers['Access-Control-Allow-Origin'] = o if o in ALLOWED else '*'
         resp.headers['Vary'] = 'Origin'
         resp.headers['Access-Control-Allow-Credentials'] = 'true'
-    # Basit CSP
-    resp.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' https://cdn.socket.io; connect-src 'self' wss: ws:; img-src 'self' data: blob:; media-src 'self' blob:; style-src 'self' 'unsafe-inline'"
-    resp.headers['X-Content-Type-Options'] = 'nosniff'
-    resp.headers['X-Frame-Options'] = 'DENY'
+        resp.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+        resp.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    
+    # Güvenlik header'ları
+    resp = security_headers(resp)
+    
+    # CSP
+    csp = (
+        "default-src 'self'; "
+        "script-src 'self' https://cdn.socket.io 'unsafe-inline'; "
+        "connect-src 'self' wss: ws: https:; "
+        "img-src 'self' data: blob:; "
+        "media-src 'self' blob:; "
+        "style-src 'self' 'unsafe-inline'; "
+        "font-src 'self' data:; "
+        "object-src 'none'; "
+        "base-uri 'self'"
+    )
+    resp.headers['Content-Security-Policy'] = csp
+    
     return resp
 
 # Socket.IO
@@ -93,12 +113,16 @@ def del_sched(rid):
 
 # Test/Repair
 @app.post("/api/test/run")
+@rate_limit(max_requests=5, window=300)  # 5 dakikada 5 test
 def run_tests_now():
+    app.logger.info("Manual test run initiated")
     res = run_all_tests_and_report()
     return {"ok": True, "results": res}
 
 @app.post("/api/repair/run")
+@rate_limit(max_requests=3, window=600)  # 10 dakikada 3 repair
 def run_repair_now():
+    app.logger.info("Manual repair run initiated")
     return run_repair()
 
 # Socket namespaces (SPEC'e göre socketio parametresi kaldırıldı)
@@ -106,9 +130,24 @@ socketio.on_namespace(ChatNS('/chat'))
 socketio.on_namespace(CallNS('/call'))
 
 def main():
+    # Logging kurulumu
+    logger = setup_logging(app)
+    logger.info("Starting Destek Admin application")
+    
+    # Veritabanı ve scheduler
     init_db()
     start_scheduler()
-    socketio.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", "10000")))
+    
+    # Uygulama başlat
+    port = int(os.environ.get("PORT", "10000"))
+    logger.info(f"Server starting on port {port}")
+    
+    socketio.run(
+        app, 
+        host="0.0.0.0", 
+        port=port,
+        debug=os.getenv('FLASK_ENV') != 'production'
+    )
 
 if __name__ == "__main__":
     main()

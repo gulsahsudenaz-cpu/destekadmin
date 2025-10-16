@@ -29,8 +29,21 @@ Thumbs.db
 
 # Logs
 *.log
+logs/
 
 # Build
 build/
 dist/
 *.egg-info/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Coverage
+.coverage
+htmlcov/
+
+# Testing
+.pytest_cache/
+.tox/
